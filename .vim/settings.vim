@@ -19,9 +19,9 @@ set term=screen-256color
 set number
 set nocompatible
 syntax enable
-set mouse=a
 set shell=bash
 set bs=2
+set mouse=a
 
 
 "

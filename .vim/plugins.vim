@@ -7,7 +7,7 @@ Plugin 'gmarik/Vundle.vim'
 "Plugins
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'itchyny/lightline.vim'
@@ -16,6 +16,9 @@ Plugin 'morhetz/gruvbox'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'posva/vim-vue'
+Plugin 'neoclide/coc.nvim'
+Plugin 'cakebaker/scss-syntax.vim'
 
 call vundle#end()
 
