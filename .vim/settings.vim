@@ -23,11 +23,16 @@ set shell=bash
 set bs=2
 set mouse=a
 
+"
+" Templates
+"
+autocmd BufNewFile *.vue 0r ~/.vim/templates/skeleton.vue
 
 "
 " Other
 " 
 set viminfo='100,<1000,s100,h
+set noswapfile
 
 set updatetime=100
 let g:gitgutter_max_signs = 1000
