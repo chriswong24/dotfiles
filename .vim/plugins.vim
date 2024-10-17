@@ -14,10 +14,13 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'morhetz/gruvbox'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-abolish'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'leafgarland/typescript-vim'
-Plugin 'posva/vim-vue'
 Plugin 'neoclide/coc.nvim'
+Plugin 'yaegassy/coc-volar',
+Plugin 'yaegassy/coc-volar-tools',
+Plugin 'posva/vim-vue'
 Plugin 'cakebaker/scss-syntax.vim'
 
 call vundle#end()

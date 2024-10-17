@@ -15,7 +15,7 @@ retab
 "
 
 colorscheme gruvbox
-set term=screen-256color
+"set term=screen-256color
 set number
 set nocompatible
 syntax enable

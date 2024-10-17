@@ -28,3 +28,7 @@ let g:NERDTreeDirArrows=0
 
 " fzf
 map ; :Files<CR>
+map ' :Ag<CR>
+
+" enter clears highlighting for search
+nnoremap <CR> :noh<CR><CR>

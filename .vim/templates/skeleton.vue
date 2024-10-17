@@ -2,21 +2,8 @@
 
 </template>
 
-<script lang="ts">
-import {defineComponent} from '@vue/composition-api';
+<script lang="ts" setup>
 
-export default defineComponent({
-  components: {
-
-  },
-  
-  setup() {
-    
-    return {
-
-    };
-  }
-});
 </script>
 
 <style lang="scss" module></style>
