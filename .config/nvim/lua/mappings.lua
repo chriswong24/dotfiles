@@ -36,6 +36,14 @@ vim.keymap.set("i", "[,", "[<CR>],<C-c>O")
 vim.keymap.set("n", "<F5>", ":let _s=@/<Bar>:%s/\\s\\+$//e<Bar>:let @/=_s<Bar><CR>")
 
 --
+-- Telescope
+--
+
+local telescope_builtin = require("telescope.builtin")
+vim.keymap.set("n", ";", telescope_builtin.find_files)
+vim.keymap.set("n", "'", telescope_builtin.live_grep)
+
+--
 -- NERDTree
 --
 
