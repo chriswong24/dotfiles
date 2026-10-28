@@ -23,7 +23,8 @@ usage() {
 Usage: ./install.sh [options]
 
 Symlinks .zshrc, .tmux.conf, .config/nvim and .config/herdr/config.toml into \$HOME.
-Existing files are moved to <target>.backup.<timestamp>.
+Targets already linked or identical to the repo are skipped; other existing
+files are moved to <target>.backup.<timestamp>.
 
 Options:
   -n, --dry-run   Show what would happen without changing anything
@@ -116,6 +117,12 @@ link() {
 
   if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
     info "already linked: $dest"
+    return 0
+  fi
+
+  # A real file/dir with the same contents as the repo is already installed; leave it alone.
+  if [ -e "$dest" ] && [ ! -L "$dest" ] && diff -rq "$src" "$dest" >/dev/null 2>&1; then
+    info "already installed (identical to repo): $dest"
     return 0
   fi
 
