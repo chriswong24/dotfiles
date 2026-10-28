@@ -11,6 +11,9 @@ OMZ_DIR="$HOME/.oh-my-zsh"
 P10K_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 OMZ_URL="https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
 P10K_URL="https://github.com/romkatv/powerlevel10k.git"
+HERDR_URL="https://herdr.dev/install.sh"
+HERDR_INSTALL_DIR="${HERDR_INSTALL_DIR:-$HOME/.local/bin}"
+HERDR_SKILL_DIR="$HOME/.claude/skills/herdr"
 
 info() { printf '==> %s\n' "$*"; }
 warn() { printf 'warning: %s\n' "$*" >&2; }
@@ -19,12 +22,12 @@ usage() {
   cat <<EOF
 Usage: ./install.sh [options]
 
-Symlinks .zshrc, .tmux.conf and .config/nvim into \$HOME.
+Symlinks .zshrc, .tmux.conf, .config/nvim and .config/herdr/config.toml into \$HOME.
 Existing files are moved to <target>.backup.<timestamp>.
 
 Options:
   -n, --dry-run   Show what would happen without changing anything
-  --with-deps     Install Oh My Zsh and powerlevel10k if missing
+  --with-deps     Install Oh My Zsh, powerlevel10k and herdr if missing
   -h, --help      Show this help
 EOF
 }
@@ -35,6 +38,17 @@ run() {
     printf '  [dry-run] %s\n' "$*"
   else
     "$@"
+  fi
+}
+
+# Print the herdr binary path, checking PATH then the installer's default dir.
+herdr_bin() {
+  if command -v herdr >/dev/null 2>&1; then
+    command -v herdr
+  elif [ -x "$HERDR_INSTALL_DIR/herdr" ]; then
+    printf '%s\n' "$HERDR_INSTALL_DIR/herdr"
+  else
+    return 1
   fi
 }
 
@@ -63,6 +77,36 @@ install_deps() {
     run git clone --depth=1 "$P10K_URL" "$P10K_DIR"
   else
     warn "powerlevel10k not found at $P10K_DIR (run with --with-deps to install it)"
+  fi
+
+  if herdr_bin >/dev/null; then
+    info "herdr found at $(herdr_bin)"
+  elif [ "$WITH_DEPS" -eq 1 ]; then
+    info "Installing herdr into $HERDR_INSTALL_DIR"
+    if [ "$DRY_RUN" -eq 1 ]; then
+      printf '  [dry-run] curl -fsSL %s | HERDR_INSTALL_DIR=%s sh\n' "$HERDR_URL" "$HERDR_INSTALL_DIR"
+    else
+      local herdr_installer
+      herdr_installer="$(curl -fsSL "$HERDR_URL")" || { warn "failed to download herdr installer"; exit 1; }
+      HERDR_INSTALL_DIR="$HERDR_INSTALL_DIR" sh -c "$herdr_installer"
+      herdr_bin >/dev/null || { warn "herdr install did not produce a binary in $HERDR_INSTALL_DIR"; exit 1; }
+    fi
+  else
+    warn "herdr not found (run with --with-deps to install it)"
+  fi
+
+  if [ -e "$HERDR_SKILL_DIR" ] || [ -L "$HERDR_SKILL_DIR" ]; then
+    info "herdr skill found at $HERDR_SKILL_DIR"
+  elif [ "$WITH_DEPS" -eq 1 ]; then
+    info "Writing herdr skill to $HERDR_SKILL_DIR/SKILL.md"
+    if [ "$DRY_RUN" -eq 1 ]; then
+      printf '  [dry-run] herdr --skill > %s/SKILL.md\n' "$HERDR_SKILL_DIR"
+    else
+      mkdir -p "$HERDR_SKILL_DIR"
+      "$(herdr_bin)" --skill > "$HERDR_SKILL_DIR/SKILL.md"
+    fi
+  else
+    warn "herdr skill not found at $HERDR_SKILL_DIR (run with --with-deps to add it)"
   fi
 }
 
@@ -105,8 +149,9 @@ install_deps
 link "$DOTFILES_DIR/.zshrc"       "$HOME/.zshrc"
 link "$DOTFILES_DIR/.tmux.conf"   "$HOME/.tmux.conf"
 link "$DOTFILES_DIR/.config/nvim" "$HOME/.config/nvim"
+link "$DOTFILES_DIR/.config/herdr/config.toml" "$HOME/.config/herdr/config.toml"
 
-for cmd in zsh nvim tmux git; do
+for cmd in zsh nvim tmux git herdr; do
   command -v "$cmd" >/dev/null 2>&1 || warn "'$cmd' not found on PATH"
 done
 

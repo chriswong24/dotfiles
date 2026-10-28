@@ -5,6 +5,7 @@ Personal configuration for:
 - **zsh** with Oh My Zsh and the powerlevel10k theme (`.zshrc`)
 - **tmux** (`.tmux.conf`)
 - **neovim** (`.config/nvim`)
+- **herdr** terminal multiplexer (`.config/herdr/config.toml`), plus its Claude Code skill
 
 ## Install
 
@@ -16,7 +17,7 @@ cd ~/workspace/dotfiles
 
 Options:
 
-- `--with-deps` installs Oh My Zsh and powerlevel10k if they are missing.
+- `--with-deps` installs Oh My Zsh, powerlevel10k and herdr if they are missing, and writes the herdr Claude Code skill (`herdr --skill`) to `~/.claude/skills/herdr`.
 - `--dry-run` (`-n`) shows what would happen without changing anything.
 - `--help` (`-h`) prints usage.
 
